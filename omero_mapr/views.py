@@ -23,14 +23,14 @@
 import logging
 import traceback
 import requests
-import cStringIO
-from urlparse import urlparse
+import io
+from urllib.parse import urlparse
 
 from Ice import Exception as IceException
 from omero import ApiUsageException, ServerError
 
 from django.conf import settings
-from mapr_settings import mapr_settings
+from .mapr_settings import mapr_settings
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseServerError, HttpResponseBadRequest
@@ -46,9 +46,9 @@ from django_redis import get_redis_connection
 
 from omero.gateway.utils import toBoolean
 
-from show import mapr_paths_to_object
-from show import MapShow as Show
-import tree as mapr_tree
+from .show import mapr_paths_to_object
+from .show import MapShow as Show
+from . import tree as mapr_tree
 
 from omeroweb.webclient.decorators import login_required, render_response
 from omeroweb.webclient.views import get_long_or_default, get_bool_or_default
@@ -103,7 +103,7 @@ def get_unicode_or_default(request, name, default):
     val = None
     val_raw = request.GET.get(name, default)
     if val_raw is not None:
-        val = unicode(strip_tags(val_raw))
+        val = str(strip_tags(val_raw))
     return val
 
 
@@ -656,7 +656,7 @@ def mapannotations_favicon(request, conn=None, **kwargs):
 
     with Image.open(mapr_settings.DEFAULT_FAVICON) as img:
         img.thumbnail((16, 16), Image.ANTIALIAS)
-        f = cStringIO.StringIO()
+        f = io.StringIO()
         img.save(f, "PNG")
         f.seek(0)
         return HttpJPEGResponse(f.read())

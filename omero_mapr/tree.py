@@ -45,7 +45,7 @@ def _escape_chars_like(query):
         "_": "\_",
     }
 
-    for k, v in escape_chars.items():
+    for k, v in list(escape_chars.items()):
         query = query.replace(k, v)
     return query
 
@@ -88,12 +88,12 @@ def _set_parameters(mapann_ns=[], mapann_names=[],
     where_clause = []
 
     if mapann_names is not None and len(mapann_names) > 0:
-        manlist = [rstring(unicode(n)) for n in mapann_names]
+        manlist = [rstring(str(n)) for n in mapann_names]
         params.add('filter', rlist(manlist))
         where_clause.append("mv.name in (:filter)")
 
     if mapann_ns is not None and len(mapann_ns) > 0:
-        mnslist = [rstring(unicode(n)) for n in mapann_ns]
+        mnslist = [rstring(str(n)) for n in mapann_ns]
         params.add("ns", rlist(mnslist))
         where_clause.append("a.ns in (:ns)")
 
@@ -523,7 +523,7 @@ def marshal_datasets(conn, project_id,
     datasets = []
 
     # early exit
-    if project_id is None or not isinstance(project_id, long):
+    if project_id is None or not isinstance(project_id, int):
         return datasets
 
     params, where_clause = _set_parameters(
@@ -615,7 +615,7 @@ def marshal_plates(conn, screen_id,
     plates = []
 
     # early exit
-    if screen_id is None or not isinstance(screen_id, long):
+    if screen_id is None or not isinstance(screen_id, int):
         return plates
 
     params, where_clause = _set_parameters(
@@ -718,7 +718,7 @@ def marshal_images(conn, parent, parent_id,
     images = []
 
     # early exit
-    if (parent_id is None or not isinstance(parent_id, long)) or not parent:
+    if (parent_id is None or not isinstance(parent_id, int)) or not parent:
         return images
 
     params, where_clause = _set_parameters(
@@ -914,7 +914,7 @@ def load_mapannotation(conn, mapann_value,
         experimenters[exp['id']] = exp
         annotations.append(d)
 
-    experimenters = experimenters.values()
+    experimenters = list(experimenters.values())
 
     return annotations, experimenters
 

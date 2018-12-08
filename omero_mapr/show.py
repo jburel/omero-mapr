@@ -26,12 +26,12 @@ import omero
 from copy import deepcopy
 
 from django.conf import settings
-from mapr_settings import mapr_settings
+from .mapr_settings import mapr_settings
 
 from omero.rtypes import rint, rlong, unwrap
 
 import omeroweb.webclient.show as omeroweb_show
-import tree as mapr_tree
+from . import tree as mapr_tree
 
 from omeroweb.utils import reverse_with_params
 
@@ -65,7 +65,7 @@ class MapShow(omeroweb_show.Show):
         first_obj = m.group('object_type')
         # if we are showing any of map.value alias make sure
         # we are not in webclient
-        if (first_obj in mapr_settings.CONFIG.keys() and
+        if (first_obj in list(mapr_settings.CONFIG.keys()) and
                 self.menu not in mapr_settings.CONFIG):
             # redirect to menu/?value=VALUE
             link = {
@@ -82,7 +82,7 @@ class MapShow(omeroweb_show.Show):
                 key = m.group('key')
                 value = m.group('value')
                 if key == 'id':
-                    value = long(value)
+                    value = int(value)
                 attributes = {key: value}
                 # Set context to 'cross-group'
                 self.conn.SERVICE_OPTS.setOmeroGroup('-1')
