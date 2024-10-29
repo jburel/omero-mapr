@@ -110,4 +110,3 @@ class IMaprTest(IWebTest):
         ctx = BulkToMapAnnotationContext(
             self.client, self.screen.proxy(), fileid=fileid, cfg=cfg)
         ctx.parse()
-        ctx.write_to_omero()
