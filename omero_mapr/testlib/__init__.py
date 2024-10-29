@@ -95,6 +95,7 @@ class IMaprTest(IWebTest):
         col_count = 6
         self.screen, self.plate = self.create_screen(row_count, col_count)
 
+        # Parse the CSV and attach it to the screen
         ctx = ParsingContext(self.client, self.screen.proxy(), file=csv)
         ctx.parse()
 
