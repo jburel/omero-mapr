@@ -97,7 +97,6 @@ class IMaprTest(IWebTest):
 
         ctx = ParsingContext(self.client, self.screen.proxy(), file=csv)
         ctx.parse()
-        ctx.write_to_omero()
 
         # Get file annotations
         anns = self.get_screen_annotations()
