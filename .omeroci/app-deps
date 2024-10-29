@@ -4,4 +4,4 @@ set -e
 set -u
 
 # for test setup
-pip3 install omero-metadata
+/opt/omero/web/venv3/bin/pip3 install omero-metadata
